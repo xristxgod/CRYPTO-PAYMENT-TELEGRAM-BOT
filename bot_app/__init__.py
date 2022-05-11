@@ -15,6 +15,5 @@ async def send_message(user_id: int, code: str, lang_id: int, keyboard=None):
         reply_markup=keyboard, disable_web_page_preview=True
     )
 
-
 async def send_msg_text(user_id: int, text: str, keyboard=None):
     return await bot.send_message(user_id, text, reply_markup=keyboard, disable_web_page_preview=True)

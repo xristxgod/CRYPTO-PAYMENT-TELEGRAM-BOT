@@ -15,5 +15,7 @@ class UserModel(models.Model):
     username = fields.CharField(max_length=255, null=True, default=None)
     balance = fields.DecimalField(max_digits=28, decimal_places=18, default=0.0)
 
+    lang = fields.ForeignKeyField('models.Lang', related_name='users', on_delete=fields.SET_NULL, default=1, null=True)
+
     class Meta:
         allow_cycles = True

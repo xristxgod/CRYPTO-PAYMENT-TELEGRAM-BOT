@@ -1,7 +1,8 @@
 from aiogram import executor, types
 from tortoise import Tortoise
 
-from bot_app.__init__ import db, bot
+from bot_app.__init__ import dp, bot
+from src.middlewares.__init__ import UserDatabaseMiddleware
 from config import Config, logger
 
 async def on_startup(_):
@@ -20,6 +21,7 @@ async def on_shutdown(_):
 if __name__ == '__main__':
     # Run bot
     try:
-        executor.start_polling(db, skip_updates=True, on_startup=on_startup, on_shutdown=on_shutdown, relax=False)
+        dp.middleware.setup(UserDatabaseMiddleware())
+        executor.start_polling(dp, skip_updates=True, on_startup=on_startup, on_shutdown=on_shutdown, relax=False)
     except Exception as error:
         logger.error(f"ERROR: {error}")

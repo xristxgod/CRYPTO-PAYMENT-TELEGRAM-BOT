@@ -5,4 +5,4 @@ from config import Config
 
 bot = Bot(token=Config.TOKEN, parse_mode="HTML")
 storage = MemoryStorage()
-db = Dispatcher(bot, storage=storage)
+dp = Dispatcher(bot, storage=storage)

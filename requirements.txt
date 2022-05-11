@@ -3,3 +3,4 @@ setuptools==57.0.0
 wheel==0.36.2
 aiogram
 tortoise-orm
+googletrans

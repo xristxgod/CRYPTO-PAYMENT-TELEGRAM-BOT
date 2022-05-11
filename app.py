@@ -1,6 +1,6 @@
 from aiogram import executor
 
-from src.__init__ import db
+from bot_app.__init__ import db
 
 if __name__ == '__main__':
     # Run bot

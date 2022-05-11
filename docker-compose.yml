@@ -1,0 +1,20 @@
+version: '3'
+
+services:
+  bot:
+    build:
+      context: ./
+      dockerfile: Dockerfile
+    container_name: qiwi_telegram_bot
+    entrypoint: python app.py
+    env_file:
+      - .env
+    networks:
+      - bot_net
+    logging:
+      options:
+        max-size: 10m
+
+networks:
+  bot_net:
+    driver: bridge

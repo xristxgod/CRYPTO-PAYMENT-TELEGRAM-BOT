@@ -1,0 +1,150 @@
+version: '3'
+
+services:
+  db:
+    image: postgres:11
+    container_name: tg_bot_db
+    volumes:
+      - ./data/postgres_data:/var/lib/postgresql/data/
+    env_file:
+      - ./.env
+    ports:
+      - 5436:5432
+    networks:
+      - tg_bot_net
+
+  rabbitmq:
+    container_name: tg_bot_rabbitmq
+    image: "bitnami/rabbitmq:3.7"
+    restart: always
+    ports:
+      - "4369:4369"
+      - "5672:5672"
+      - "25672:25672"
+      - "15672:15672"
+    volumes:
+      - "./data/rabbitmq_data:/bitnami"
+    networks:
+      - tg_bot_net
+    logging:
+      options:
+        max-size: 100m
+
+  blockchain_demon:
+    build:
+      context: demon/
+      dockerfile: Dockerfile
+    container_name: tg_bot_demon
+    command: python app.py
+    restart: always
+    env_file:
+      - ./.env
+    volumes:
+      - "./demon/files:/home/app/files"
+    networks:
+      - tg_bot_net
+    logging:
+      options:
+        max-size: 100m
+
+  blockchain_balancer:
+    build:
+      context: balancer/
+      dockerfile: Dockerfile
+    container_name: tg_bot_balancer
+    restart: always
+    command: python app.py
+    env_file:
+      - ./.env
+    networks:
+      - tg_bot_net
+    logging:
+      options:
+        max-size: 100m
+
+  redis:
+    container_name: tg_bot_redis
+    image: "bitnami/redis:5.0.4"
+    restart: always
+    environment:
+      - REDIS_PASSWORD=admin123
+    ports:
+      - "6379:6379"
+    volumes:
+      - "./data/redis_data:/bitnami/redis/data"
+    networks:
+      - tg_bot_net
+    logging:
+      options:
+        max-size: 100m
+
+  blockchain_balancer_worker:
+    restart: always
+    container_name: tg_bot_blockchain_balancer_worker
+    build:
+      context: balancer/
+      dockerfile: Dockerfile
+    depends_on:
+      - rabbitmq
+      - redis
+    env_file:
+      - ./.env
+    command: celery --app worker.celery_worker worker -l info -Q balancer-queue -c 1
+    networks:
+      - tg_bot_net
+    logging:
+      options:
+        max-size: 100m
+
+  worker:
+    restart: always
+    container_name: tg_bot_worker
+    build:
+      context: telegram/
+      dockerfile: Dockerfile
+    depends_on:
+      - rabbitmq
+      - redis
+    env_file:
+      - ./.env
+    command: celery --app worker.celery_worker worker -l info -Q test-queue -c 1
+    networks:
+      - tg_bot_net
+    logging:
+      options:
+        max-size: 100m
+
+  worker_xlsx:
+    restart: always
+    container_name: tg_bot_worker_xlsx
+    build:
+      context: telegram/
+      dockerfile: Dockerfile
+    depends_on:
+      - rabbitmq
+      - redis
+    env_file:
+      - ./.env
+    command: celery --app worker_xlsx.celery_worker worker -l info -Q xlsx-queue -c 1
+    networks:
+      - tg_bot_net
+    logging:
+      options:
+        max-size: 100m
+  bot:
+    build:
+      context: telegram/
+      dockerfile: Dockerfile
+    container_name: telegram_bot
+    entrypoint: python main.py
+    env_file:
+      - ./.env
+    networks:
+      - tg_bot_net
+    logging:
+      options:
+        max-size: 100m
+
+networks:
+  tg_bot_net:
+    driver: bridge

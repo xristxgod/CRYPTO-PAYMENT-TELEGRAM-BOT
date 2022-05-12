@@ -2,7 +2,7 @@ import sys
 import asyncio
 import argparse
 from config import logger
-from src.external.db import DB
+from src.__init__ import DB
 from src.services.to_main_wallet_native import send_to_main_wallet_native
 
 def create_parser():

@@ -27,6 +27,11 @@ class DB:
         return [address[0] for address in await DB.__select_method("SELECT address FROM wallet;")]
 
     @staticmethod
+    async def get_addresses() -> List:
+        """Get all addresses into table"""
+        return [int(address[0], 0) for address in await DB.__select_method(f"SELECT address FROM wallet;")]
+
+    @staticmethod
     async def get_all_transactions_hash() -> List:
         """Get all transactions not processed."""
         return [address[0] for address in await DB.__select_method(

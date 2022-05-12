@@ -1,5 +1,6 @@
 import asyncio
 from decimal import Decimal
+
 from celery.signals import worker_process_init
 
 from worker.celery_app import celery_app, init

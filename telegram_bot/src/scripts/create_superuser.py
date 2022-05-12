@@ -1,4 +1,4 @@
-from bot_app.start.services import create_wallet
+from app.start.services import create_wallet
 from config import logger, decimals
 from src.models import TGUser, Table, Queue, Purchase
 

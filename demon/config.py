@@ -28,6 +28,8 @@ class Config(object):
     RABBITMQ_URL = environ.get("RABBITMQ_URL")
     REDIS_URL = environ.get("REDIS_URL")
 
+    SEND_TO_MAIN_WALLET_LIMIT = environ.get("SEND_TO_MAIN_WALLET_LIMIT")
+
     TOKEN = environ.get("TOKEN")
     ADMIN_IDS = [int(x) for x in environ.get('ADMIN_IDS').split(',')]
 

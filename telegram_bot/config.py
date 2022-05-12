@@ -14,6 +14,7 @@ class Config(object):
 
     DATABASE_URL = environ.get("DATABASE_URL")
     RABBITMQ_URL = environ.get("RABBITMQ_URL")
+    REDIS_URL = environ.get("REDIS_URL")
 
     TOKEN = environ.get("TOKEN")
     ADMIN_IDS = [int(x) for x in environ.get('ADMIN_IDS').split(',')]

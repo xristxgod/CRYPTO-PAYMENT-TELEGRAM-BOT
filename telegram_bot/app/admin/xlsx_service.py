@@ -40,7 +40,6 @@ async def get_users_xlsx() -> (BytesIO, str):
     os.remove(filename)
     return file_io, filename
 
-
 async def get_status(st):
     if st == 0:
         status = 'Создано'
@@ -51,7 +50,6 @@ async def get_status(st):
     else:
         status = 'Ошибка'
     return status
-
 
 async def get_tx_type(t):
     if t == 1:
@@ -71,7 +69,6 @@ async def get_tx_type(t):
     else:
         status = 'Покупка стола'
     return status
-
 
 async def get_tx_xlsx() -> (BytesIO, str):
     filename = f'{datetime.now().strftime("%Y-%m-%d_%H:%M:%S")}.xlsx'
@@ -126,7 +123,6 @@ async def get_tx_xlsx() -> (BytesIO, str):
         file_io.seek(0)
     os.remove(filename)
     return file_io, filename
-
 
 async def get_tables_xlsx() -> (BytesIO, str):
     filename = f'{datetime.now().strftime("%Y-%m-%d_%H:%M:%S")}.xlsx'

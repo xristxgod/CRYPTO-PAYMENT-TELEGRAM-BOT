@@ -5,7 +5,7 @@ from config import Config
 
 celery_xlsx_app = Celery(
     "worker",
-    backend="redis://:password123@redis:6379/0",
+    backend=Config.REDIS_URL,
     broker=Config.RABBITMQ_URL
 )
 celery_xlsx_app.conf.task_routes = {
